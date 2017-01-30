@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>JerrikEph - Cat2</title>
+        <link rel="stylesheet" href="jerrikeph.github.io/theme/css/main.css" />
+        <link href="jerrikeph.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="JerrikEph Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="jerrikeph.github.io/">JerrikEph </a></h1>
+                <nav><ul>
+                    <li><a href="jerrikeph.github.io/category/cat1.html">Cat1</a></li>
+                    <li class="active"><a href="jerrikeph.github.io/category/cat2.html">Cat2</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="jerrikeph.github.io/second_post.html">second_post</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-12-13T18:32:00+08:00">
+                Published: Sat 13 December 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="jerrikeph.github.io/author/jingjing-gong-jerrik.html">Jingjing Gong (Jerrik)</a>
+        </address>
+<p>In <a href="jerrikeph.github.io/category/cat2.html">Cat2</a>.</p>
+
+</footer><!-- /.post-info --><h1>Setup Deep Learning enviroment on linux</h1>
+<h2>Intro</h2>
+<p>I have seen a lot of people have trouble setting up an deeplearning enviroment on linux, that's the main motivation why I wrote this document.</p>
+<p>In this document I will be focusing on setting up a <strong>user-level</strong> or <strong>local enviroment</strong> via <em>anaconda2 / anaconda3</em>, and talk a bit about linux environment variable.</p>
+<h4>Why do we want a local environment</h4>
+<p>Usually we share a server with other people, if one user screws the global eviroment, he/she screws us all. That's why we need to learn to setup and maintain our own local environment.</p>
+<h2>A bit about linux environment variable</h2>
+<p>When we log in to linux through a terminal or graphical user interface, the system will read <code>/etc/profile</code> and <code>~/.bashrc #giving that you use bash as your shell</code> to setup your bash variable, also called environment variable in Windows.</p>
+<p>As far as we are concerned, we only need to know two bash variable (or environment varialbe if you will).</p>
+<ul>
+<li>
+<p>PATH:</p>
+<p>I think <strong>PATH</strong> variable is <strong>the</strong> most important variable in linux.</p>
+<p>When you type <code>echo $PATH</code> in your terminal, you probably would see <code>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin</code> or something like that.
+those paths sperated by <em>:</em> is the searching paths. 
+When we type a command in the terminal, for example <code>cp file1 file2</code> and hit enter, what the system will do is to search a executable file named <em>cp</em> <strong>from left to right</strong> from those searching paths. As soon as it finds the executable then the found exeutable is loaded and executed (taking file1 file2 as argument).
+* LD_LIBRARY_PATH</p>
+<p>This variable is also very important. A lot of binary executables/programs in linux, they are not standalone binary, they will need to link other dynamic libraries while loading. <em>LD_LIBRARY_PATH</em> is this kind of variable, that sotres the directory paths that contains dynamic libraries, put in another way, link program find dynamic library files from those path while load a program.</p>
+<p>I mention this variable mainly is because that, gpu version Tensorflow will need to locate CUDA library from this variable, so we will need to prefix the directory path of CUDA library to this variable</p>
+</li>
+</ul>
+<blockquote>
+<p>note that bash variables are case sensitive, in fact almost everything in linux is case sensitive.</p>
+</blockquote>
+<h4>How to add a directory path to bash variable</h4>
+<p>Assume you want to add a <em>/path/to/your/bin</em> to variable PATH, do <code>export PATH=/path/to/your/bin:$PATH</code> you are not quite done, since this will take effect only in current logged in bash session.
+So what you need to do is to append this line in <code>~/.bashrc</code> file assuming that you are using bash as your shell (type <code>echo $0</code> to check out). As I have mentioned previously, when you log in system will set up variable according to <code>/etc/profile</code> and <code>~/.bashrc</code> file.</p>
+<blockquote>
+<p>Since <code>/etc/profile</code> can't be modified without a <em>sudo</em> raise, and also you shouldn't mess around with that file since it will effect all users. you should append your <code>export PATH=/path/to/your/bin:$PATH</code> to your local configuration file <code>~/.bashrc</code>. a dot <code>.</code> prefix in the name means that it is an hidden file, normaly you can't see it through graphical file browser, use command <code>ls -a</code> to list all file including hidden files </p>
+<p>For users using <strong>zsh</strong>, the configuration file is <code>~/.zshrc</code></p>
+</blockquote>
+<p>Now, every time you log in, the system will setup bash variables that you specified in <code>~/.bashrc</code> for you. <strong>Note that you should put <code>/path/to/your/bin</code> before<code>$PATH</code>, so when you type a command(if not bash build in), it will look into <code>/path/to/your/bin</code> first</strong>. Now if you type <code>echo $PATH</code> you will see <code>/path/to/your/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin</code> or something like that. Remember that path in the left is looked upon first.</p>
+<h2>Install anaconda</h2>
+<p>When installed, anaconda is just a directory that contains python binary and some other related tool binary such as <em>pip, jupyter, etc</em>. , and a whole bunch of python packages.</p>
+<p>before install anaconda, you can type <code>which python</code> or <code>which pip</code> to checkout which (in which directory) python or pip you are using</p>
+<h4>Why don't we use virtualenv</h4>
+<p>Well, it's too troublesome. Switch in to and out from virtualenv is painful.</p>
+<h4>Download</h4>
+<p>You can choose the version that suits you and download from <a href="https://www.continuum.io/downloads">it's official site</a> via a browser or using <code>wget &lt;url&gt;</code> (you probably will need to find <code>&lt;url&gt;</code> using your local borwser first)</p>
+<h4>Install</h4>
+<p><code>bash /&lt;your&gt;/&lt;downloadPath&gt;/Anaconda2-4.0.0-Linux-x86_64.sh -b</code></p>
+<p>You can replace <code>/&lt;your&gt;/&lt;downloadPath&gt;/Anaconda2-4.0.0-Linux-x86_64.sh</code> with the version that you have downloaded. The option <code>-b</code> will spare you from numerous confirmation. After installation, your anaconda will be in <code>~/anaconda2</code> or <code>~/anaconda3</code>.</p>
+<h4>Set PATH variable</h4>
+<p>binaries in anaconda resides in <code>~/anaconda2/bin</code> or<code>~/anaconda3/bin</code> (if you install anaconda version 3). So you should append <code>export PATH=~/anaconda2/bin:$PATH</code> or <code>export PATH=~/anaconda3/bin:$PATH</code> in <code>~/.bashrc</code> file (.zshrc if you use <em>zsh</em> shell)</p>
+<blockquote>
+<p>By appending string to ~/.bashrc, you should use <em>vi</em> or <em>vim</em> to edit ~/.bashrc. although it will work but you should <strong>not</strong> use echo to append string to a file, since it will expand variable in the string before append the string to the target file.</p>
+</blockquote>
+<p>Now we should logout and re-log-in for .bashrc to be loaded and new settings take effect.
+Then type <code>which python</code> to check you have PATH variable set correctly. If you see something like <code>/home/fudan/anaconda2/bin/python</code> then you are good to go.</p>
+<h2>Install python packages using pip</h2>
+<p>within anaconda you can use pip to install packages whatever you like using <code>pip install &lt;package&gt;</code>. But do remember <strong>don't use</strong> <code>sudo pip install &lt;packages&gt;</code>, if you use the sudo version your packages will be installed to the global environment, with your PATH set according to previous step, you won't be able to use the packages you installed using sudo, and more importantly you would corrupt the global environment.</p>
+<h2>Install Tensorflow locally using pip</h2>
+<p>For Ubuntu/Linux 64-bit, CPU only, Python 2.7</p>
+<div class="highlight"><pre><span></span>export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.11.0rc0-cp27-none-linux_x86_64.whl
+</pre></div>
+
+
+<p>For Ubuntu/Linux 64-bit, GPU enabled, Python 2.7</p>
+<div class="highlight"><pre><span></span>export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.11.0rc0-cp27-none-linux_x86_64.whl
+</pre></div>
+
+
+<p>You can find the above url in <a href="https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#using-pip">Tensorflow get started</a></p>
+<p>then <code>pip install --upgrade $TF_BINARY_URL</code>, remember <strong>don't</strong> use <code>sudo</code>. If you ever encounter some <code>Cannot remove entries from nonexistent file /home/test/anaconda2/lib/python2.7/site-packages/easy-install.pth</code> error, and you probably would if you install cpu version, you should do </p>
+<div class="highlight"><pre><span></span>pip install --ignore-installed setuptools
+</pre></div>
+
+
+<p>first, and then </p>
+<div class="highlight"><pre><span></span><span class="x">pip install --upgrade </span><span class="p">$</span><span class="nv">TF_BINARY_URL</span><span class="x"></span>
+</pre></div>
+
+
+<p>If you are trying to install gpu version of tensorflow, you also need to add CUDA lib path to <code>LD_LIBRARY_PATH</code> variable. CUDA installation path defaults to <code>/usr/local/cuda-7.5/lib64</code>, type <code>which nvcc</code> if you can't find any nvcc, then you should find cuda bin directory and put cuda binary path to <code>PATH</code> variable.</p>
+<blockquote>
+<p><code>$TF_BINARY_URL</code> will be expanded to the url you set in <code>export TF_BINARY_URL=</code> </p>
+<p>in fact you can install cuda any where you want, as long as your cuda version is compatible with your gpu driver, and you add cuda lib path to <code>$TF_BINARY_URL</code> and cuda bin path to <code>PATH</code>, you'll be fine.</p>
+</blockquote>
+<h4>Check the install</h4>
+<p>type <code>python -c 'import tensorflow'</code> in your terminal, if no error pops up, then you are probably good to go.</p>
+<h2>Install jupyter in the remote server using pip</h2>
+<p>Usually jupyter is installed along with anaconda, type <code>which jupyter</code> to check it out. If not, type <code>pip install jupyter</code>, the installation is done.</p>
+<p>If you are satisfied with a local machine jupyter, you don't need to do any configuration. But if you want to configure a remote version </p>
+<p>then generate your certificate file using <code>openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out mycert.pem</code>. and copy <code>mycert.pem</code> to <code>~/.jupyter/</code></p>
+<p>do <code>jupyter notebook --generate-config</code> to generate configuration file then edit <code>.jupyter/jupyter_notebook_config.py</code> file, append below lines:</p>
+<div class="highlight"><pre><span></span>c = get_config()
+c.IPKernelApp.pylab = &#39;inline&#39;
+c.NotebookApp.certfile = u&#39;/home/test/.jupyter/mycert.pem&#39;
+c.NotebookApp.ip = &#39;*&#39;
+c.NotebookApp.open_browser = False
+c.NotebookApp.port = 1111
+</pre></div>
+
+
+<p>then you can start jupyter notebook <code>nohup jupyter notebook &gt; /dev/null &amp;</code> on your server side, and access it from your local machine browser <code>https://&lt;your-server&gt;:1111</code>. choose to trust the certificate (especially when you are using safari, or you won't be able to connect to kernel).</p>
+<blockquote>
+<p>nohup to and &amp; to put the program into background and avoid being killed while exit the shell &gt;/dev/null means you want to trash any terminal ouput from jupyter</p>
+<p>note that you should change <code>c.NotebookApp.port = 1111</code> to the port that you want, also for the sake of avoid port colliding. and also change test to your user directory.</p>
+</blockquote>
+<h4>Remote jupyter explained</h4>
+<p>If you connect to a remote jupyter via a browser, browser is just a output window. the actual code is executed in the remote server, the output is send back to your browser though https protocal.</p>
+<h2>Some heads up</h2>
+<p>When you write tensorflow code using jupyter, and if you have installed gpu version tensorflow. everytime after code execution in jupyter you should restart the python kernel. If you don't pass a config argument to tf.Session it will take all your gpu memory, and if you don't restart the kernel, that means the process is always there and taking all the gpu memory. </p>
+<p>And also, if you are building a data graph in jupyter, and you click run multiple times on the same code block, then it will build multiple graphs.If some tensorflow variable name collides, it will pop up some error.</p>
+<blockquote>
+<p>do this </p>
+</blockquote>
+<div class="highlight"><pre><span></span>config=tf.ConfigProto()
+config.gpu_options.allow_growth = True
+config.allow_soft_placement = True
+with tf.Session(config=config) as sess:
+</pre></div>
+
+
+<blockquote>
+<p>to prevent tensorflow from taking all your gpu memory</p>
+</blockquote>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="jerrikeph.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

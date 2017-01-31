@@ -54,18 +54,6 @@ body {
   padding-bottom:15px;
 }
 
-h1 {
-    font-size: 40px;
-}
-
-h2 {
-    font-size: 30px;
-}
-
-p {
-    font-size: 140px;
-}
-
 /* code style */
 .hightlight { background-color: #ffffcc }
 .c { color: #999988; font-style: italic } /* Comment */

@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>JerrikEph</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2017-01-30T00:00:00+08:00</updated><entry><title>Setup Deep Learning enviroment on linux</title><link href="/setup-deep-learning-enviroment-on-linux.html" rel="alternate"></link><published>2017-01-30T00:00:00+08:00</published><updated>2017-01-30T00:00:00+08:00</updated><author><name>Jingjing Gong (Jerrik)</name></author><id>tag:None,2017-01-30:/setup-deep-learning-enviroment-on-linux.html</id><summary type="html">&lt;h2&gt;Intro&lt;/h2&gt;
-&lt;p&gt;I have seen a lot of people have trouble setting up an deeplearning enviroment on linux, that's the main motivation why I wrote this document.&lt;/p&gt;
+&lt;p&gt;I have seen a lot of people have trouble setting up a Deeplearning enviroment on linux, that's the main motivation why I wrote this document.&lt;/p&gt;
 &lt;p&gt;In this document I will be focusing on setting up a &lt;strong&gt;user-level&lt;/strong&gt; or &lt;strong&gt;local enviroment&lt;/strong&gt; via &lt;em&gt;anaconda2 / anaconda3&lt;/em&gt;, and talk a bit about linux …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Intro&lt;/h2&gt;
-&lt;p&gt;I have seen a lot of people have trouble setting up an deeplearning enviroment on linux, that's the main motivation why I wrote this document.&lt;/p&gt;
+&lt;p&gt;I have seen a lot of people have trouble setting up a Deeplearning enviroment on linux, that's the main motivation why I wrote this document.&lt;/p&gt;
 &lt;p&gt;In this document I will be focusing on setting up a &lt;strong&gt;user-level&lt;/strong&gt; or &lt;strong&gt;local enviroment&lt;/strong&gt; via &lt;em&gt;anaconda2 / anaconda3&lt;/em&gt;, and talk a bit about linux environment variable.&lt;/p&gt;
 &lt;h4&gt;Why do we want a local environment&lt;/h4&gt;
 &lt;p&gt;Usually we share a server with other people, if one user screws the global eviroment, he/she screws us all. That's why we need to learn to setup and maintain our own local environment.&lt;/p&gt;
 &lt;h2&gt;A bit about linux environment variable&lt;/h2&gt;
 &lt;p&gt;When we log in to linux through a terminal or graphical user interface, the system will read &lt;code&gt;/etc/profile&lt;/code&gt; and &lt;code&gt;~/.bashrc #giving that you use bash as your shell&lt;/code&gt; to setup your bash variable, also called environment variable in Windows.&lt;/p&gt;
-&lt;p&gt;As far as we are concerned, we only need to know two bash variable (or environment varialbe if you will).&lt;/p&gt;
+&lt;p&gt;As far as we Deep learners are concerned, we only need to know two bash variable (or environment varialbe if you will).&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;PATH:&lt;/p&gt;
 &lt;p&gt;I think &lt;strong&gt;PATH&lt;/strong&gt; variable is &lt;strong&gt;the&lt;/strong&gt; most important variable in linux.&lt;/p&gt;
 &lt;p&gt;When you type &lt;code&gt;echo $PATH&lt;/code&gt; in your terminal, you probably would see &lt;code&gt;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin&lt;/code&gt; or something like that.
 those paths sperated by &lt;em&gt;:&lt;/em&gt; is the searching paths. 
-When we type a command in the terminal, for example &lt;code&gt;cp file1 file2&lt;/code&gt; and hit enter, what the system will do is to search a executable file named &lt;em&gt;cp&lt;/em&gt; &lt;strong&gt;from left to right&lt;/strong&gt; from those searching paths. As soon as it finds the executable then the found exeutable is loaded and executed (taking file1 file2 as argument).
-* LD_LIBRARY_PATH&lt;/p&gt;
+When we type a command in the terminal, for example &lt;code&gt;cp file1 file2&lt;/code&gt; and hit enter, what the system will do is to search a executable file named &lt;em&gt;cp&lt;/em&gt; (&lt;strong&gt;from left to right&lt;/strong&gt;) from those searching paths. As soon as it finds the executable then the found exeutable is loaded and executed (taking file1 file2 as argument).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;LD_LIBRARY_PATH&lt;/p&gt;
 &lt;p&gt;This variable is also very important. A lot of binary executables/programs in linux, they are not standalone binary, they will need to link other dynamic libraries while loading. &lt;em&gt;LD_LIBRARY_PATH&lt;/em&gt; is this kind of variable, that sotres the directory paths that contains dynamic libraries, put in another way, link program find dynamic library files from those path while load a program.&lt;/p&gt;
-&lt;p&gt;I mention this variable mainly is because that, gpu version Tensorflow will need to locate CUDA library from this variable, so we will need to prefix the directory path of CUDA library to this variable&lt;/p&gt;
+&lt;p&gt;I mention this variable mainly is because that, gpu version of Tensorflow will need to locate CUDA library from this variable, so we will need to prefix the directory path of CUDA library to this variable&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
@@ -50,7 +52,7 @@ So what you need to do is to append this line in &lt;code&gt;~/.bashrc&lt;/code&
 &lt;p&gt;Now we should logout and re-log-in for .bashrc to be loaded and new settings take effect.
 Then type &lt;code&gt;which python&lt;/code&gt; to check you have PATH variable set correctly. If you see something like &lt;code&gt;/home/fudan/anaconda2/bin/python&lt;/code&gt; then you are good to go.&lt;/p&gt;
 &lt;h2&gt;Install python packages using pip&lt;/h2&gt;
-&lt;p&gt;within anaconda you can use pip to install packages whatever you like using &lt;code&gt;pip install &amp;lt;package&amp;gt;&lt;/code&gt;. But do remember &lt;strong&gt;don't use&lt;/strong&gt; &lt;code&gt;sudo pip install &amp;lt;packages&amp;gt;&lt;/code&gt;, if you use the sudo version your packages will be installed to the global environment, with your PATH set according to previous step, you won't be able to use the packages you installed using sudo, and more importantly you would corrupt the global environment.&lt;/p&gt;
+&lt;p&gt;within anaconda you can use pip to install packages whatever you like using &lt;code&gt;pip install &amp;lt;package&amp;gt;&lt;/code&gt;. But do remember &lt;strong&gt;don't use&lt;/strong&gt; &lt;code&gt;sudo pip install &amp;lt;packages&amp;gt;&lt;/code&gt;, if you use the sudo version, your packages will be installed to the global environment, with your PATH set according to previous step, you won't be able to use the packages you installed using sudo, and more importantly you would corrupt the global environment.&lt;/p&gt;
 &lt;h2&gt;Install Tensorflow locally using pip&lt;/h2&gt;
 &lt;p&gt;For Ubuntu/Linux 64-bit, CPU only, Python 2.7&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.11.0rc0-cp27-none-linux_x86_64.whl
@@ -97,13 +99,13 @@ c.NotebookApp.port = 1111
 &lt;p&gt;then you can start jupyter notebook &lt;code&gt;nohup jupyter notebook &amp;gt; /dev/null &amp;amp;&lt;/code&gt; on your server side, and access it from your local machine browser &lt;code&gt;https://&amp;lt;your-server&amp;gt;:1111&lt;/code&gt;. choose to trust the certificate (especially when you are using safari, or you won't be able to connect to kernel).&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;nohup to and &amp;amp; to put the program into background and avoid being killed while exit the shell &amp;gt;/dev/null means you want to trash any terminal ouput from jupyter&lt;/p&gt;
-&lt;p&gt;note that you should change &lt;code&gt;c.NotebookApp.port = 1111&lt;/code&gt; to the port that you want, also for the sake of avoid port colliding. and also change test to your user directory.&lt;/p&gt;
+&lt;p&gt;note that you should change &lt;code&gt;c.NotebookApp.port = 1111&lt;/code&gt; to the port that you want, also for the sake of avoiding port colliding. and also change test to your user directory.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h4&gt;Remote jupyter explained&lt;/h4&gt;
-&lt;p&gt;If you connect to a remote jupyter via a browser, browser is just a output window. the actual code is executed in the remote server, the output is send back to your browser though https protocal.&lt;/p&gt;
+&lt;p&gt;If you connect to a remote jupyter via a browser, browser is just an output window. the actual code is executed in the remote server, the output is send back to your browser though https protocal.&lt;/p&gt;
 &lt;h2&gt;Some heads up&lt;/h2&gt;
-&lt;p&gt;When you write tensorflow code using jupyter, and if you have installed gpu version tensorflow. everytime after code execution in jupyter you should restart the python kernel. If you don't pass a config argument to tf.Session it will take all your gpu memory, and if you don't restart the kernel, that means the process is always there and taking all the gpu memory. &lt;/p&gt;
-&lt;p&gt;And also, if you are building a data graph in jupyter, and you click run multiple times on the same code block, then it will build multiple graphs.If some tensorflow variable name collides, it will pop up some error.&lt;/p&gt;
+&lt;p&gt;When you write tensorflow code using jupyter, and if you have installed gpu version of tensorflow. everytime after code execution in jupyter you should restart the python kernel. If you don't pass a config argument to tf.Session it will take all your gpu memory, and if you don't restart the kernel, that means the process is always there and taking all your gpu memory. &lt;/p&gt;
+&lt;p&gt;And also, if you are building a computational graph in jupyter, and you click run multiple times on the same code block, then it will build multiple graphs.If some tensorflow variable name collides, it will pop up some error.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;do this &lt;/p&gt;
 &lt;/blockquote&gt;

@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400italic,700,700italic|Share+Tech+Mono|Oxygen+Mono);
+@import url(http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic,700italic,300,300italic&subset=latin,latin-ext);
 
 @media (max-width: 776px) {
   .text-right {
@@ -22,7 +22,7 @@ body {
 /* Custom page footer */
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 80px;
+  margin-bottom: 800px;
 }
 
 .footer {

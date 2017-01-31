@@ -55,7 +55,7 @@ When we type a command in the terminal, for example <code>cp file1 file2</code> 
 </blockquote>
 <h4>How to add a directory path to bash variable</h4>
 <p>Assume you want to add a <em>/path/to/your/bin</em> to variable PATH, do <code>export PATH=/path/to/your/bin:$PATH</code>, and you are not quite done, since this will take effect only in current logged-in bash session.
-So what you need to do is to append this line in <code>~/.bashrc</code> file (assuming that you are using bash as your shell, type <code>echo $0</code> to check out). As I have mentioned previously, when you log in, system will set up variable according to <code>/etc/profile</code> and <code>~/.bashrc</code> file.</p>
+So what you need to do is to append this line in <code>~/.bashrc</code> file (assuming that you are using bash as your shell, type <code>echo $0</code> to check out). As I have mentioned previously, when you log in, system will set up variables according to <code>/etc/profile</code> and <code>~/.bashrc</code> file.</p>
 <blockquote>
 <p>Since <code>/etc/profile</code> can't be modified without a <em>sudo</em> raise, and also you shouldn't mess around with that file since it will effect all users. you should append your <code>export PATH=/path/to/your/bin:$PATH</code> to your local configuration file <code>~/.bashrc</code>. a dot <code>.</code> prefix in the name means that it is an hidden file, normaly you can't see it through graphical file browser, use command <code>ls -a</code> to list all file including hidden files </p>
 <p>For users using <strong>zsh</strong>, the configuration file is <code>~/.zshrc</code></p>

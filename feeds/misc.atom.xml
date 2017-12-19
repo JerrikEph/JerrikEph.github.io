@@ -118,4 +118,4 @@ with tf.Session(config=config) as sess:
 
 &lt;blockquote&gt;
 &lt;p&gt;to prevent tensorflow from taking all your gpu memory&lt;/p&gt;
-&lt;/blockquote&gt;</content></entry><entry><title>Setup</title><link href="/setup.html" rel="alternate"></link><published>2017-01-23T00:00:00+08:00</published><updated>2017-01-23T00:00:00+08:00</updated><author><name>Jingjing Gong (Jerrik)</name></author><id>tag:None,2017-01-23:/setup.html</id><summary type="html">&lt;h1&gt;陈新驰傻逼&lt;/h1&gt;</summary><content type="html">&lt;h1&gt;陈新驰傻逼&lt;/h1&gt;</content></entry></feed>
+&lt;/blockquote&gt;</content></entry></feed>
